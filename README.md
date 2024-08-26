@@ -44,7 +44,7 @@ O projeto é composto por um único arquivo HTML que integra todos os componente
    ```
 
 2. **Abra o Arquivo HTML**:
-   - Navegue até o diretório onde o repositório foi clonado e abra o arquivo `index.html` em seu navegador de preferência.
+   - Navegue até o diretório onde o repositório foi clonado e abra o arquivo `sorteio-liapo.html` em seu navegador de preferência.
 
 3. **Configuração do Sorteio**:
    - Preencha os campos de número mínimo, número máximo, e números excluídos (se houver).
