@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteio LIAPO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 50px;
+            overflow: hidden;
+            color: #6a36a3;
+            /* Cor roxa aplicada ao texto padrão */
+        }
+
+        .winner {
+            font-size: 3em;
+            color: #28a745;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .ball {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: #6a36a3;
+            /* Cor roxa aplicada à bolinha */
+            color: white;
+            font-size: 4em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            25% {
+                transform: translate(-48%, -52%) rotate(-5deg);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            75% {
+                transform: translate(-52%, -48%) rotate(5deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+        }
+
+        .btn-primary {
+            background-color: #6a36a3;
+            /* Cor roxa aplicada ao botão */
+            border-color: #6a36a3;
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            color: #6a36a3;
+            /* Cor roxa aplicada ao texto do footer */
+        }
+
+        footer a {
+            color: #6a36a3;
+            /* Cor roxa aplicada ao link do footer */
+            text-decoration: none;
+        }
+
+        .form-group,
+        .btn-primary,
+        h1,
+        img,
+        p,
+        footer {
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="mb-2">Sorteio LIAPO</h1>
+    <div class="text-center mb-2">
+        <img src="./images/1.png" alt="Slogan LIAPO" class="img-fluid mx-auto" style="max-width: 150px;">
+    </div>
+    <p class="mb-2 text-center">Escolha o intervalo de números e os números que devem ser excluídos.</p>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="mb-2 form-group">
+                    <label for="minNumber" class="form-label">Número Mínimo</label>
+                    <input type="number" class="form-control" id="minNumber" placeholder="Ex: 1">
+                </div>
+                <div class="mb-2 form-group">
+                    <label for="maxNumber" class="form-label">Número Máximo</label>
+                    <input type="number" class="form-control" id="maxNumber" placeholder="Ex: 100">
+                </div>
+                <div class="mb-2 form-group">
+                    <label for="excludedNumbers" class="form-label">Números Excluídos (separados por vírgula)</label>
+                    <input type="text" class="form-control" id="excludedNumbers" placeholder="Ex: 5, 10, 15">
+                </div>
+                <button class="btn btn-primary mb-2 w-100" id="drawButton">Sortear</button>
+            </div>
+        </div>
+    </div>
+    <div class="ball" id="ball">0</div>
+    <div class="winner" id="winner"></div>
+    <footer class="text-center py-2 mt-auto">
+        &copy; 2024 Sorteio LIAPO - Todos os direitos reservados. Designed & Developed with
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236a36a3'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E"
+            alt="heart" width="20" height="20">
+        by abc Ensina | <a href="#" class="text-decoration-none">Contato</a>
+    </footer>
+    <script>
+        function startConfetti() {
+            confetti({
+                particleCount: 200,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
+        document.getElementById('drawButton').addEventListener('click', function () {
+            const minNumber = parseInt(document.getElementById('minNumber').value);
+            const maxNumber = parseInt(document.getElementById('maxNumber').value);
+            const excludedNumbers = document.getElementById('excludedNumbers').value.split(',').map(Number);
+            let availableNumbers = [];
+
+            for (let i = minNumber; i <= maxNumber; i++) {
+                if (!excludedNumbers.includes(i)) {
+                    availableNumbers.push(i);
+                }
+            }
+
+            if (availableNumbers.length > 0) {
+                const ball = document.getElementById('ball');
+                const winnerText = document.getElementById('winner');
+
+                // Esconder elementos não necessários durante o sorteio
+                document.querySelector('h1').style.opacity = 0;
+                document.querySelector('p').style.opacity = 0;
+                document.querySelector('img').style.opacity = 0; // Adiciona a imagem para ser escondida
+                document.querySelectorAll('.form-group, .btn-primary, footer').forEach(el => el.style.opacity = 0);
+                winnerText.style.display = 'none';
+
+
+                // Mostrar a bolinha
+                ball.style.display = 'flex';
+
+                // Configurações da animação de sorteio
+                let intervalTime = 20; // Começa com uma troca extremamente rápida
+                const fastDuration = 5000; // Tempo em milissegundos em que a velocidade rápida permanece constante
+                const slowDuration = 5000; // Tempo em milissegundos em que a velocidade diminui gradualmente
+                const totalTime = fastDuration + slowDuration; // Duração total do sorteio
+                const decrementFactor = 1.1; // Fator pelo qual o intervalo de tempo aumenta na fase de desaceleração
+                let elapsedTime = 0;
+
+                function shuffleNumbers() {
+                    // Sorteia um número aleatório disponível
+                    const randomIndex = Math.floor(Math.random() * availableNumbers.length);
+                    ball.textContent = availableNumbers[randomIndex];
+
+                    elapsedTime += intervalTime;
+                    if (elapsedTime < totalTime) {
+                        if (elapsedTime > fastDuration) {
+                            intervalTime *= decrementFactor; // Aumenta o intervalo para diminuir a velocidade
+                        }
+                        setTimeout(shuffleNumbers, intervalTime);
+                    } else {
+                        const finalNumber = availableNumbers[randomIndex];
+                        ball.textContent = finalNumber;
+                        ball.style.animation = ''; // Parar a animação de shake
+
+                        // Adicionar o número sorteado à lista de excluídos
+                        const newExcludedNumbers = [...excludedNumbers, finalNumber].join(', ');
+                        document.getElementById('excludedNumbers').value = newExcludedNumbers;
+
+                        setTimeout(() => {
+                            ball.style.display = 'none'; // Esconder a bolinha
+                            document.querySelector('h1').style.opacity = 1;
+                            winnerText.innerHTML = `O número sorteado é:<br><strong>${finalNumber}</strong>`;
+                            winnerText.style.display = 'block';
+
+                            // Soltar os confetes
+                            startConfetti();
+
+                            // Restaurar os elementos
+                            document.querySelector('p').style.opacity = 1;
+                            document.querySelector('img').style.opacity = 1;
+                            document.querySelectorAll('.form-group, .btn-primary, footer').forEach(el => el.style.opacity = 1);
+                        }, 500);
+                    }
+                }
+
+                shuffleNumbers(); // Inicia a troca de números
+            } else {
+                document.getElementById('winner').textContent = 'Nenhum número disponível para sorteio.';
+            }
+        });
+    </script>
+</body>
+
+</html>
