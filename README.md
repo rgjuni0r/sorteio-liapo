@@ -82,7 +82,7 @@ Este projeto está sob a licença MIT. Consulte o arquivo `LICENSE` para obter m
 
 ## Contato
 
-Para dúvidas ou sugestões, entre em contato através do [e-mail](mailto:contato@abcensina.com) ou visite nosso [site](https://abcensina.com).
+Para dúvidas ou sugestões, entre em contato através do [e-mail](mailto:suporte@abcensina.com.br) ou visite nosso [site](https://abcensina.com.br).
 
 ---
 
@@ -90,5 +90,5 @@ Este projeto foi desenvolvido com dedicação para oferecer uma solução de sor
 
 Atenciosamente,
 
-**[Seu Nome]**  
+**Rogério Moreira Alves Júnior**  
 *Desenvolvedor Full Stack | CEO da abc Ensina*
